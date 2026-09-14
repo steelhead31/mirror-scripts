@@ -29,6 +29,12 @@ ADOPTIUM_REPO=${2:-"https://github.com/adoptium/$JDKVERSION.git"}
 BRANCH=${3:-"master"}
 SOLARIS=${4:-"normal"}
 
+# The "head" JDK (jdk21, jdk27, ...) lives in adoptium/jdk, not adoptium/jdk<N>.
+# Only override when no explicit repo URL was provided as $2.
+if [[ -z "${2:-}" && "$JDKVERSION" =~ ^jdk[0-9]+$ ]]; then
+  ADOPTIUM_REPO="https://github.com/adoptium/jdk.git"
+fi
+
 # Since we have "jdk8u" in the code, we need to create another lever of "workspace"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 mkdir -p $SCRIPT_DIR/workspace
